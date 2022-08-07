@@ -1,6 +1,6 @@
 package com.dpflsy.todoserver.controller;
 
-import com.dpflsy.todoserver.model.TodoEntity;
+import com.dpflsy.todoserver.model.TodoModel;
 import com.dpflsy.todoserver.model.TodoRequest;
 import com.dpflsy.todoserver.service.TodoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,11 +35,11 @@ public class TodoControllerTest {
     @MockBean
     private TodoService todoService;
 
-    private TodoEntity expected;
+    private TodoModel expected;
 
     @BeforeEach
     void setup() {
-        this.expected = new TodoEntity();
+        this.expected = new TodoModel();
         this.expected.setId(123L);
         this.expected.setTitle("test");
         this.expected.setOrder(0L);
@@ -51,7 +51,7 @@ public class TodoControllerTest {
         when(this.todoService.add(any(TodoRequest.class)))
                 .then((i) -> {
                     TodoRequest request = i.getArgument(0, TodoRequest.class);
-                    return new TodoEntity(this.expected.getId(), request.getTitle(), request.getOrder(), request.getCompleted());
+                    return new TodoModel(this.expected.getId(), request.getTitle(), request.getOrder(), request.getCompleted());
                 });
 
         TodoRequest request = new TodoRequest();
@@ -93,10 +93,10 @@ public class TodoControllerTest {
 
     @Test
     void readAll() throws Exception {
-        List<TodoEntity> mockList = new ArrayList<>();
+        List<TodoModel> mockList = new ArrayList<>();
         int expectedLength = 10;
         for (int i = 0; i < expectedLength; i++) {
-            mockList.add(mock(TodoEntity.class));
+            mockList.add(mock(TodoModel.class));
         }
 
         given(todoService.searchAll()).willReturn(mockList);
